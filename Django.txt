@@ -1,0 +1,67 @@
+pip install django-binary-database-files 
+
+pip install --upgrade django						(can thi nhap)
+python -m pip install --upgrade pip					(can thi nhap)
+
+django-admin startproject ten_project
+
+...xampp Tao CSDL
+
+...nhap trong setting
+'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tenCSDL',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+
+...init
+import pymysql
+pymysql.version_info = (2, 2, 1, "final", 0)
+pymysql.install_as_MySQLdb()
+
+pip install pymysql
+
+... manage.py
+py manage.py migrate
+
+python manage.py startapp app
+ 
+...view
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.templatetags.static import static
+# Create your views here.
+#def index(request):
+    #return render(request,'ten/app1/static/html/home.html')
+def index(request):
+    return HttpResponse('TenSV chao cac ban')
+def index1(request):
+    return HttpResponse('Day la trang thu nhat')
+def index2(request):
+    return HttpResponse('Day la trang con')
+
+...tao urls
+from django.contrib import admin
+from django.urls import path,include
+from . import views
+
+urlpatterns = [
+    path('', views.index),
+    path('app1/', views.index1),
+    path('app1/1/', views.index2),
+]
+
+...urls.
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('app1.urls')),
+]
+
+py manage.py runserver
+

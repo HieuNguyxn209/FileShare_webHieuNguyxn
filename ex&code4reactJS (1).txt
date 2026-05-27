@@ -1,0 +1,48 @@
+Extensions:
+Auto Rename Tag
+
+Babel Javascript
+
+Bookmarks
+
+DotENV
+
+ESLint
+
+Javascript (ES6) code snippets
+
+Prettier
+
+Reactjs code snippets
+
+styled-components-snippets
+
+Tailwind CSS Intellisense
+
+Turbo Console Log
+
+GitHub Copilot Chat
+!!!Theo video HD là Visual Studio IntelliCode nhưng giờ VS code ko cho cài
+để dần thay thế bằng GitHub Copilot Chat tại Visual Studio IntelliCode đã cũ.
+
+vscode-styled-components
+
+Software(Phần mền):
+https://nodejs.org/dist/v25.4.0/node-v25.4.0-x64.msi
+
+https://github.com/git-for-windows/git/releases/download/v2.52.0.windows.1/Git-2.52.0-64-bit.exe
+
+https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi
+
+https://chromewebstore.google.com/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
+
+bash(Terminal):
+!!!Lưu ý:Chuyển sang Git Bash trước khi gõ(New Terminal -> để ý "+⌄" ngay góc phải gần chữ
+"powershell" -> Bấm ⌄ -> Git Bash)
+
+npx create-react-app my-app	<|
+				 | Có thể đổi tên khác'my-app'nhưng cả 2 phải cùng một tên 
+cd my-app			<|
+
+npm start
+
