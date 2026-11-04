@@ -109,7 +109,7 @@ s = var_con_cak()
 
 SANH = f"""#!/bin/python{ver}
 # -*- coding: utf-8 -*-
-
+#Source code đã được Obfuscator
 
 __INFO__ = {{
     'User': 'USER_NAME',
