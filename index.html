@@ -1,365 +1,627 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HieuNguyxn - FileShare</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HieuNguyxn — FileShare Hub</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-        body {
-            background: #0d1117;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-        }
+:root{
+  --txt:#eaf1ff;
+  --dim:#8b9bb4;
+  --dim2:#5d6d88;
+  --line:rgba(126,157,207,.14);
+  --line2:rgba(126,157,207,.34);
+  --grad:linear-gradient(135deg,#58a6ff 0%,#a78bfa 100%);
+  --glass:rgba(16,22,34,.66);
+}
 
-        .logo-wrapper {
-            position: fixed;
-            top: 20px;
-            left: 25px;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
-        }
+html{scroll-behavior:smooth}
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #58a6ff;
-            letter-spacing: 1px;
-            text-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
-            transition: 0.3s;
-        }
+body{
+  min-height:100vh;
+  background:#070a12;
+  color:var(--txt);
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  padding:26px 20px 90px;
+  position:relative;
+}
 
-        .logo span {
-            color: #f0f6fc;
-        }
+/* ================= NỀN ================= */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-grid{
+  position:absolute;inset:-20%;
+  background-image:
+    linear-gradient(rgba(126,157,207,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(126,157,207,.06) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(ellipse 65% 55% at 50% 25%,#000 10%,transparent 72%);
+          mask-image:radial-gradient(ellipse 65% 55% at 50% 25%,#000 10%,transparent 72%);
+}
+.glow{position:absolute;border-radius:50%;filter:blur(100px)}
+.g1{width:520px;height:520px;top:-200px;left:-160px;background:#1f6feb;opacity:.40;animation:drift 18s ease-in-out infinite}
+.g2{width:600px;height:600px;bottom:-260px;right:-180px;background:#7c3aed;opacity:.32;animation:drift 22s ease-in-out infinite reverse}
+.g3{width:420px;height:420px;top:38%;left:44%;background:#0ea5e9;opacity:.14;animation:drift 26s ease-in-out infinite}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(40px,-34px) scale(1.08)}
+}
 
-        .logo-line {
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(90deg, #58a6ff, #8b5cf6);
-            border-radius: 2px;
-        }
-        .web-link {
-            font-size: 0.75rem;
-            color: #8b949e;
-            margin-top: 2px;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            transition: 0.3s;
-        }
+/* ================= LAYOUT ================= */
+.page{
+  position:relative;z-index:2;
+  max-width:1200px;margin:0 auto;
+  display:grid;
+  grid-template-columns:326px minmax(0,1fr);
+  gap:26px;
+  align-items:start;
+}
 
-        .web-link span {
-            color: #f0f6fc;
-        }
+/* ================= SIDEBAR ================= */
+.side{position:sticky;top:26px}
 
-        .web-link a {
-            color: #58a6ff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
+.side-card{
+  background:var(--glass);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px;
+  backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:0 26px 60px rgba(0,0,0,.5);
+  position:relative;
+  overflow:hidden;
+}
+.side-card::before{
+  content:"";position:absolute;top:0;left:18%;right:18%;height:1px;
+  background:var(--grad);opacity:.85;
+}
 
-        .web-link a:hover {
-            color: #8b5cf6;
-            text-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
-        }
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{
+  width:54px;height:54px;flex:0 0 auto;border-radius:17px;
+  display:grid;place-items:center;
+  background:var(--grad);
+  font-weight:800;font-size:1.05rem;letter-spacing:.5px;color:#07101d;
+  box-shadow:0 12px 28px -8px rgba(88,166,255,.85);
+}
+.brand-name{font-size:1.4rem;font-weight:800;letter-spacing:.3px;line-height:1.15;color:#f2f7ff}
+.brand-name em{
+  font-style:normal;
+  background:var(--grad);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.brand-sub{
+  font-size:.66rem;letter-spacing:2.6px;text-transform:uppercase;
+  color:var(--dim2);margin-top:5px;font-weight:600;
+}
 
-        .main-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 50vh;
-            padding-top: 60px;
-        }
+.side-desc{
+  margin-top:18px;font-size:.83rem;line-height:1.65;color:var(--dim);
+}
 
-        .container {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 16px;
-            padding: 30px 25px;
-            max-width: 550px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-        }
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.stat{
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+  border-radius:15px;padding:12px 14px;
+}
+.stat b{display:block;font-size:1.15rem;font-weight:750;color:#f2f7ff}
+.stat span{font-size:.63rem;letter-spacing:.7px;text-transform:uppercase;color:var(--dim2);font-weight:600}
 
-        .container-title {
-            color: #f0f6fc;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+.side-link{
+  display:flex;align-items:center;gap:12px;
+  margin-top:20px;padding:13px 15px;border-radius:15px;
+  background:rgba(88,166,255,.09);
+  border:1px solid rgba(88,166,255,.24);
+  color:var(--txt);text-decoration:none;
+  font-size:.83rem;font-weight:600;
+  transition:.28s;overflow:hidden;
+}
+.side-link i{color:#58a6ff;font-size:.95rem;flex:0 0 auto}
+.side-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-link:hover{
+  background:rgba(88,166,255,.18);
+  border-color:rgba(88,166,255,.55);
+  transform:translateX(4px);
+  box-shadow:0 10px 26px -10px rgba(88,166,255,.9);
+}
 
-        .container-title i {
-            color: #58a6ff;
-        }
+.live{
+  display:flex;align-items:center;gap:8px;
+  margin-top:16px;font-size:.72rem;color:var(--dim2);font-weight:600;
+}
+.live i{width:7px;height:7px;border-radius:50%;background:#3ddc84;box-shadow:0 0 10px #3ddc84;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-        .file-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 20px;
-            max-height: 450px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
+/* ================= MAIN ================= */
+.main{min-width:0}
 
-        .file-list::-webkit-scrollbar {
-            width: 5px;
-        }
+.top-row{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.search{position:relative;flex:1;min-width:0}
+.search > i{
+  position:absolute;left:15px;top:50%;transform:translateY(-50%);
+  color:var(--dim2);font-size:.85rem;pointer-events:none;
+}
+.search input{
+  width:100%;padding:13px 16px 13px 42px;
+  background:rgba(16,22,34,.72);
+  border:1px solid var(--line);
+  border-radius:15px;
+  color:var(--txt);font-size:.88rem;font-family:inherit;
+  outline:none;transition:.28s;
+}
+.search input::placeholder{color:var(--dim2)}
+.search input:focus{
+  border-color:rgba(88,166,255,.55);
+  background:rgba(16,22,34,.92);
+  box-shadow:0 0 0 4px rgba(88,166,255,.12);
+}
 
-        .file-list::-webkit-scrollbar-thumb {
-            background: #30363d;
-            border-radius: 10px;
-        }
+.count{
+  flex:0 0 auto;padding:12px 16px;border-radius:15px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  font-size:.78rem;font-weight:700;color:var(--dim);white-space:nowrap;
+}
 
-        .file-card {
-            background: #21262d;
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 14px 16px;
-            text-align: left;
-            transition: 0.2s;
-            cursor: pointer;
-        }
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{
+  padding:9px 16px;border-radius:999px;
+  font-size:.79rem;font-weight:650;font-family:inherit;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  color:var(--dim);cursor:pointer;white-space:nowrap;
+  transition:.25s;
+}
+.chip:hover{color:var(--txt);border-color:var(--line2);background:rgba(255,255,255,.08)}
+.chip.on{
+  color:#07101d;background:var(--grad);border-color:transparent;
+  box-shadow:0 10px 24px -10px rgba(88,166,255,.95);
+}
 
-        .file-card:hover {
-            border-color: #1f6feb;
-            box-shadow: 0 0 15px rgba(31, 111, 235, 0.2);
-            background: #1f6feb15;
-        }
+/* ================= FILE CARD ================= */
+.list{display:flex;flex-direction:column;gap:12px}
 
-        .file-card a {
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.file{
+  --c:#58a6ff;--c-soft:rgba(88,166,255,.16);
+  position:relative;
+  display:flex;align-items:center;gap:16px;
+  padding:16px 18px;
+  border-radius:18px;
+  background:linear-gradient(150deg,rgba(22,29,44,.78),rgba(11,16,26,.78));
+  border:1px solid var(--line);
+  overflow:hidden;
+  transition:transform .3s cubic-bezier(.34,1.15,.64,1),border-color .3s,box-shadow .3s;
+  animation:rise .6s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.file:nth-child(1){animation-delay:.04s}
+.file:nth-child(2){animation-delay:.09s}
+.file:nth-child(3){animation-delay:.14s}
+.file:nth-child(4){animation-delay:.19s}
+.file:nth-child(5){animation-delay:.24s}
+.file:nth-child(6){animation-delay:.29s}
+.file:nth-child(7){animation-delay:.34s}
+.file:nth-child(8){animation-delay:.39s}
 
-        .file-card i.fa-file,
-        .file-card i.fa-brands,
-        .file-card i.fa-solid {
-            font-size: 1.6rem;
-            color: #58a6ff;
-            width: 30px;
-            text-align: center;
-        }
+.file::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:.35s;
+  background:radial-gradient(120% 150% at 0% 0%,var(--c-soft),transparent 62%);
+}
+.file::after{
+  content:"";position:absolute;left:0;top:12%;bottom:12%;width:3px;border-radius:0 4px 4px 0;
+  background:var(--c);opacity:0;transition:.3s;
+}
+.file:hover{
+  transform:translateY(-4px);
+  border-color:var(--line2);
+  box-shadow:0 18px 40px -16px rgba(0,0,0,.95),0 0 0 1px var(--c-soft);
+}
+.file:hover::before{opacity:1}
+.file:hover::after{opacity:1}
 
-        .file-info {
-            flex: 1;
-            min-width: 0;
-        }
+.f-doc{--c:#58a6ff;--c-soft:rgba(88,166,255,.16)}
+.f-app{--c:#3ddc84;--c-soft:rgba(61,220,132,.16)}
+.f-tool{--c:#a78bfa;--c-soft:rgba(167,139,250,.16)}
+.f-web{--c:#f7df1e;--c-soft:rgba(247,223,30,.13)}
 
-        .file-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #f0f6fc;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+.hit{position:absolute;inset:0;z-index:1;border-radius:inherit}
 
-        .file-size {
-            font-size: 0.75rem;
-            color: #8b949e;
-            margin-top: 2px;
-        }
+.f-ico{
+  flex:0 0 auto;width:48px;height:48px;border-radius:15px;
+  display:grid;place-items:center;
+  font-size:1.2rem;color:var(--c);
+  background:var(--c-soft);
+  border:1px solid rgba(255,255,255,.07);
+  transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s;
+}
+.file:hover .f-ico{transform:scale(1.07) rotate(-6deg);box-shadow:0 10px 24px -10px var(--c)}
 
-        .file-note {
-            margin-top: 8px;
-            padding: 8px 12px;
-            background: #0d1117;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            color: #8b949e;
-            font-style: italic;
-            border-left: 3px solid #30363d;
-            line-height: 1.4;
-            word-break: break-word;
-        }
+.f-body{flex:1;min-width:0;position:relative;z-index:0}
+.f-name{font-size:.96rem;font-weight:650;line-height:1.4;color:#f2f7ff;word-break:break-word}
+.f-meta{display:flex;align-items:center;gap:9px;margin-top:7px;flex-wrap:wrap}
+.tag{
+  font-size:.64rem;font-weight:750;letter-spacing:.9px;text-transform:uppercase;
+  padding:3px 8px;border-radius:6px;
+  background:var(--c-soft);color:var(--c);
+}
+.size{font-size:.73rem;color:var(--dim2);font-weight:600}
+.f-note{
+  margin-top:10px;padding-left:11px;
+  border-left:2px solid rgba(126,157,207,.22);
+  font-size:.79rem;line-height:1.6;color:var(--dim);
+  word-break:break-word;
+}
 
-        .file-note i {
-            margin-right: 5px;
-            color: #58a6ff;
-            font-size: 0.7rem;
-        }
+.f-side{
+  flex:0 0 auto;display:flex;align-items:center;gap:8px;
+  position:relative;z-index:2;
+}
+.icon-btn{
+  width:38px;height:38px;border-radius:12px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  color:var(--dim);font-size:.88rem;font-family:inherit;
+  cursor:pointer;transition:.25s;
+}
+.icon-btn:hover{color:#f2f7ff;background:rgba(255,255,255,.1);border-color:var(--line2);transform:translateY(-2px)}
 
-        .download-icon {
-            color: #8b949e;
-            font-size: 1.1rem;
-            transition: 0.2s;
-            margin-left: auto;
-        }
+.f-dl{
+  width:38px;height:38px;border-radius:12px;
+  display:grid;place-items:center;
+  background:var(--c-soft);color:var(--c);
+  border:1px solid rgba(255,255,255,.07);
+  font-size:.9rem;transition:.28s;
+}
+.file:hover .f-dl{background:var(--grad);color:#07101d;border-color:transparent;box-shadow:0 10px 22px -10px rgba(88,166,255,.95)}
 
-        .file-card:hover .download-icon {
-            color: #58a6ff;
-        }
+/* ================= EMPTY / FOOTER ================= */
+.empty{
+  text-align:center;padding:52px 20px;color:var(--dim2);
+  border:1px dashed var(--line);border-radius:18px;
+}
+.empty i{font-size:1.9rem;margin-bottom:12px;display:block;color:#39455c}
+.empty p{font-size:.86rem}
 
-        .empty-msg {
-            color: #8b949e;
-            padding: 30px 0;
-            font-style: italic;
-        }
+.foot{
+  margin-top:22px;padding-top:18px;
+  border-top:1px dashed rgba(126,157,207,.16);
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  font-size:.76rem;color:var(--dim2);text-align:center;
+}
+.foot i{color:#58a6ff}
 
-        .footer-note {
-            color: #484f58;
-            font-size: 0.75rem;
-            margin-top: 15px;
-        }
+/* ================= TOAST + TOP ================= */
+.toast{
+  position:fixed;left:50%;bottom:30px;z-index:99;
+  display:flex;align-items:center;gap:10px;
+  padding:13px 20px;border-radius:14px;
+  background:rgba(16,22,34,.95);
+  border:1px solid rgba(61,220,132,.4);
+  box-shadow:0 20px 45px rgba(0,0,0,.6);
+  font-size:.83rem;font-weight:650;color:#f2f7ff;
+  transform:translate(-50%,26px);opacity:0;pointer-events:none;
+  transition:.35s cubic-bezier(.34,1.3,.64,1);
+  backdrop-filter:blur(12px);
+}
+.toast i{color:#3ddc84}
+.toast.show{transform:translate(-50%,0);opacity:1}
 
-        @media (max-width: 600px) {
-            .logo-wrapper {
-                position: relative;
-                top: auto;
-                left: auto;
-                align-items: center;
-                margin-bottom: 20px;
-            }
+.totop{
+  position:fixed;right:18px;bottom:22px;z-index:60;
+  width:46px;height:46px;border-radius:15px;
+  display:grid;place-items:center;
+  background:var(--grad);color:#07101d;font-size:.95rem;
+  border:none;cursor:pointer;
+  box-shadow:0 16px 34px -12px rgba(88,166,255,.95);
+  opacity:0;pointer-events:none;transform:translateY(16px);
+  transition:.35s cubic-bezier(.34,1.3,.64,1);
+}
+.totop.show{opacity:1;pointer-events:auto;transform:translateY(0)}
 
-            .logo {
-                font-size: 1.6rem;
-            }
+/* ================= RESPONSIVE ================= */
+@media (max-width:980px){
+  .page{grid-template-columns:1fr;gap:18px}
+  .side{position:static}
+}
 
-            .main-wrapper {
-                padding-top: 0;
-            }
+@media (max-width:680px){
+  body{padding:16px 14px 84px}
 
-            .container {
-                padding: 20px 15px;
-            }
+  .side-card{padding:16px;border-radius:18px}
+  .brand-mark{width:46px;height:46px;border-radius:14px;font-size:.92rem}
+  .brand-name{font-size:1.18rem}
+  .brand-sub{font-size:.6rem;letter-spacing:2px}
+  .side-desc{display:none}
+  .stats{margin-top:14px;gap:8px}
+  .stat{padding:10px 12px;border-radius:12px}
+  .stat b{font-size:1rem}
+  .stat span{font-size:.58rem}
+  .side-link{margin-top:14px;padding:11px 13px;font-size:.76rem}
+  .live{display:none}
 
-            .file-card {
-                padding: 12px;
-            }
-        }
-    </style>
+  .top-row{gap:8px}
+  .search input{padding:12px 14px 12px 38px;font-size:.85rem;border-radius:13px}
+  .search > i{left:13px}
+  .count{padding:11px 13px;font-size:.72rem;border-radius:13px}
+
+  /* chips cuộn ngang kiểu app */
+  .chips{
+    flex-wrap:nowrap;overflow-x:auto;margin:0 -14px 16px;
+    padding:0 14px 4px;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chip{padding:8px 14px;font-size:.75rem}
+
+  .file{padding:14px;gap:12px;border-radius:16px}
+  .file:hover{transform:none}
+  .f-ico{width:42px;height:42px;border-radius:13px;font-size:1.05rem}
+  .f-name{font-size:.9rem}
+  .f-note{font-size:.75rem;margin-top:8px}
+  .f-side{gap:6px}
+  .icon-btn,.f-dl{width:34px;height:34px;border-radius:11px;font-size:.8rem}
+  .toast{bottom:22px;font-size:.79rem;padding:12px 17px}
+  .totop{right:14px;bottom:16px;width:44px;height:44px}
+}
+</style>
 </head>
 <body>
 
-    <div class="logo-wrapper">
-        <div class="logo">Hieu<span>Nguyxn</span></div>
-        <div class="logo-line"></div>
-        <div class="web-link">
-            <span>File share của web:</span><a href="https://hieunguyxn.pythonanywhere.com/">hieunguyxn.pythonanywhere.com</a>
+<div class="bg">
+  <div class="bg-grid"></div>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+</div>
+
+<div class="page">
+
+  <!-- ============ SIDEBAR (PC) / HEADER (MOBILE) ============ -->
+  <aside class="side">
+    <div class="side-card">
+      <div class="brand">
+        <div class="brand-mark">HN</div>
+        <div>
+          <div class="brand-name">Hieu<em>Nguyxn</em></div>
+          <div class="brand-sub">FileShare Hub</div>
         </div>
+      </div>
+
+      <p class="side-desc">
+        Kho tài liệu, ứng dụng và công cụ mình tự làm. Tải về dùng thử rồi góp ý cho mình nhé!
+      </p>
+
+      <div class="stats">
+        <div class="stat"><b id="statFiles">6</b><span>Tệp chia sẻ</span></div>
+        <div class="stat"><b>24/7</b><span>Hoạt động</span></div>
+      </div>
+
+      <a class="side-link" href="https://hieunguyxn.pythonanywhere.com/" target="_blank" rel="noopener">
+        <i class="fa-solid fa-globe"></i>
+        <span>hieunguyxn.pythonanywhere.com</span>
+      </a>
+
+      <div class="live"><i></i> Server đang hoạt động</div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <div class="top-row">
+      <div class="search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="q" placeholder="Tìm file, tool, tài liệu...">
+      </div>
+      <div class="count" id="count">6 tệp</div>
     </div>
 
-    <div class="main-wrapper">
-        <div class="container">
-
-            <div class="container-title">
-                <i class="fa-solid fa-cloud-arrow-down"></i> File chia sẻ
-            </div>
-
-            <!-- DANH SÁCH FILE -->
-            <div class="file-list" id="fileList">
-
-                <div class="file-card">
-                    <a href="ex&code4reactJS.txt" download>
-                        <i class="fa-solid fa-file-lines"></i>
-                        <div class="file-info">
-                            <div class="file-name">ex&code4reactJS</div>
-                            <div class="file-size">1.07 KB</div>
-                        </div>
-                        <i class="fa-solid fa-download download-icon"></i>
-                    </a>
-                    <div class="file-note">
-                        <i class="fa-solid fa-circle-info"></i> ex&code4reactJS.txt - Tài liệu hướng dẫn start React
-                    </div>
-                </div>
-
-                <div class="file-card">
-                    <a href="Django.txt" download>
-                        <i class="fa-solid fa-file-lines"></i>
-                        <div class="file-info">
-                            <div class="file-name">Django</div>
-                            <div class="file-size">1.49 KB</div>
-                        </div>
-                        <i class="fa-solid fa-download download-icon"></i>
-                    </a>
-                    <div class="file-note">
-                        <i class="fa-solid fa-circle-info"></i> Django.txt - Tài liệu hướng dẫn start Django
-                    </div>
-                </div>
-
-                <!-- File 3 - APK -->
-                <div class="file-card">
-                    <a href="HieuNguyxn.apk" download>
-                        <i class="fa-brands fa-android"></i>
-                        <div class="file-info">
-                            <div class="file-name">App apk tự tạo</div>
-                            <div class="file-size">5.41 MB</div>
-                        </div>
-                        <i class="fa-solid fa-download download-icon"></i>
-                    </a>
-                    <div class="file-note">
-                        <i class="fa-solid fa-circle-info"></i> HieuNguyxn.apk - App tự tạo với mục đích học tập, ae xem rồi đánh giá nha
-                    </div>
-                </div>
-
-                <div class="file-card">
-                <a href="Dos V2.zip" download>
-                    <i class="fa-solid fa-file-zipper"></i>
-                    <div class="file-info">
-                        <div class="file-name">Dos V2</div>
-                        <div class="file-size">55 KB</div>
-                    </div>
-                    <i class="fa-solid fa-download download-icon"></i>
-                </a>
-                <div class="file-note">
-                    <i class="fa-solid fa-circle-info"></i> Dos V2.zip - Ddos Internet...(Đã update tự động cài Python 3.14)
-                </div>
-                </div>
-                
-                <div class="file-card">
-                    <a href="DoiTenGCN.exe" download>
-                        <i class="fa-brands fa-windows"></i>
-                        <div class="file-info">
-                            <div class="file-name">Tool Đổi Tên File GCN</div>
-                            <div class="file-size">18.67 MB</div>
-                        </div>
-                        <i class="fa-solid fa-download download-icon"></i>
-                    </a>
-                    <div class="file-note">
-                        <i class="fa-solid fa-circle-info"></i> DoiTenGCN.exe - Hỗ trợ đổi tên GCN nhanh nhờ NotebookLM
-                    </div>
-                </div>
-
-                <div class="file-card">
-                    <a href="https://hieunguyxn.pythonanywhere.com/dichvu/obfpython/">
-                        <i class="fa-brands fa-python"></i>
-                        <div class="file-info">
-                            <div class="file-name">Tool Obfuscator (Mã hóa code)</div>
-                            <div class="file-size">Web</div>
-                        </div>
-                        <i class="fa-solid fa-arrow-right download-icon"></i>
-                    </a>
-                    <div class="file-note">
-                        <i class="fa-solid fa-circle-info"></i> Mã hóa (encode) source Python với obfuscator Shenron
-                    </div>
-                </div>
-
-            <div class="footer-note">
-                ● Bấm vào file để tải về
-            </div>
-        </div>
+    <div class="chips" id="chips">
+      <button class="chip on" data-cat="all">Tất cả</button>
+      <button class="chip" data-cat="doc">Tài liệu</button>
+      <button class="chip" data-cat="app">Ứng dụng</button>
+      <button class="chip" data-cat="tool">Công cụ</button>
     </div>
 
+    <div class="list" id="list">
+
+      <!-- 1 -->
+      <article class="file f-doc" data-cat="doc">
+        <a class="hit" href="ex&amp;code4reactJS.txt" download aria-label="Tải ex&amp;code4reactJS"></a>
+        <div class="f-ico"><i class="fa-solid fa-file-lines"></i></div>
+        <div class="f-body">
+          <div class="f-name">ex&amp;code4reactJS</div>
+          <div class="f-meta"><span class="tag">TXT</span><span class="size">1.07 KB</span></div>
+          <p class="f-note">Tài liệu hướng dẫn start React từ con số 0.</p>
+        </div>
+        <div class="f-side">
+          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
+          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
+        </div>
+      </article>
+
+      <!-- 2 -->
+      <article class="file f-doc" data-cat="doc">
+        <a class="hit" href="Django.txt" download aria-label="Tải Django"></a>
+        <div class="f-ico"><i class="fa-solid fa-file-lines"></i></div>
+        <div class="f-body">
+          <div class="f-name">Django</div>
+          <div class="f-meta"><span class="tag">TXT</span><span class="size">1.49 KB</span></div>
+          <p class="f-note">Tài liệu hướng dẫn start Django chi tiết.</p>
+        </div>
+        <div class="f-side">
+          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
+          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
+        </div>
+      </article>
+
+      <!-- 3 -->
+      <article class="file f-app" data-cat="app">
+        <a class="hit" href="HieuNguyxn.apk" download aria-label="Tải App apk tự tạo"></a>
+        <div class="f-ico"><i class="fa-brands fa-android"></i></div>
+        <div class="f-body">
+          <div class="f-name">App apk tự tạo</div>
+          <div class="f-meta"><span class="tag">APK</span><span class="size">5.41 MB</span></div>
+          <p class="f-note">HieuNguyxn.apk — App tự tạo với mục đích học tập, ae xem rồi đánh giá nha.</p>
+        </div>
+        <div class="f-side">
+          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
+          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
+        </div>
+      </article>
+
+      <!-- 4 -->
+      <article class="file f-tool" data-cat="tool">
+        <a class="hit" href="Dos V2.zip" download aria-label="Tải Dos V2"></a>
+        <div class="f-ico"><i class="fa-solid fa-file-zipper"></i></div>
+        <div class="f-body">
+          <div class="f-name">Dos V2</div>
+          <div class="f-meta"><span class="tag">ZIP</span><span class="size">55 KB</span></div>
+          <p class="f-note">Dos V2.zip — Ddos Internet... (Đã update tự động cài Python 3.14).</p>
+        </div>
+        <div class="f-side">
+          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
+          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
+        </div>
+      </article>
+
+      <!-- 5 -->
+      <article class="file f-tool" data-cat="tool">
+        <a class="hit" href="DoiTenGCN.exe" download aria-label="Tải Tool Đổi Tên File GCN"></a>
+        <div class="f-ico"><i class="fa-brands fa-windows"></i></div>
+        <div class="f-body">
+          <div class="f-name">Tool Đổi Tên File GCN</div>
+          <div class="f-meta"><span class="tag">EXE</span><span class="size">18.67 MB</span></div>
+          <p class="f-note">DoiTenGCN.exe — Hỗ trợ đổi tên GCN nhanh nhờ NotebookLM.</p>
+        </div>
+        <div class="f-side">
+          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
+          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
+        </div>
+      </article>
+
+      <!-- 6 -->
+      <article class="file f-web" data-cat="tool">
+        <a class="hit" href="https://hieunguyxn.pythonanywhere.com/dichvu/obfpython/" target="_blank" rel="noopener" aria-label="Mở Tool Obfuscator"></a>
+        <div class="f-ico"><i class="fa-brands fa-python"></i></div>
+        <div class="f-body">
+          <div class="f-name">Tool Obfuscator (Mã hóa code)</div>
+          <div class="f-meta"><span class="tag">WEB</span><span class="size">Online</span></div>
+          <p class="f-note">Mã hóa (encode) source Python với obfuscator Shenron.</p>
+        </div>
+        <div class="f-side">
+          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
+          <span class="f-dl"><i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="empty" id="empty" hidden>
+      <i class="fa-regular fa-face-frown"></i>
+      <p>Không tìm thấy tệp nào phù hợp</p>
+    </div>
+
+    <div class="foot">
+      <i class="fa-solid fa-circle-info"></i>
+      Bấm vào thẻ file để tải về
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span>Đã sao chép liên kết</span></div>
+<button class="totop" id="totop" aria-label="Lên đầu trang"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script>
+(function () {
+  const files   = Array.from(document.querySelectorAll('.file'));
+  const chips   = Array.from(document.querySelectorAll('.chip'));
+  const qInput  = document.getElementById('q');
+  const countEl = document.getElementById('count');
+  const emptyEl = document.getElementById('empty');
+  const statEl  = document.getElementById('statFiles');
+  const toastEl = document.getElementById('toast');
+  const toTop   = document.getElementById('totop');
+  let activeCat = 'all';
+
+  statEl.textContent = files.length;
+
+  /* ---------- Lọc + tìm kiếm ---------- */
+  function apply() {
+    const q = qInput.value.trim().toLowerCase();
+    let shown = 0;
+
+    files.forEach(f => {
+      const okCat = activeCat === 'all' || f.dataset.cat === activeCat;
+      const okQ   = !q || f.textContent.toLowerCase().includes(q);
+      const show  = okCat && okQ;
+      f.hidden = !show;
+      if (show) shown++;
+    });
+
+    countEl.textContent = shown + ' tệp';
+    emptyEl.hidden = shown !== 0;
+  }
+
+  chips.forEach(c => c.addEventListener('click', () => {
+    chips.forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+    activeCat = c.dataset.cat;
+    apply();
+  }));
+
+  qInput.addEventListener('input', apply);
+
+  /* ---------- Toast ---------- */
+  let toastTimer;
+  function toast(msg) {
+    toastEl.querySelector('span').textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1900);
+  }
+
+  /* ---------- Copy link ---------- */
+  document.querySelectorAll('.copy').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const card = btn.closest('.file');
+      const link = card.querySelector('.hit');
+      const url  = new URL(link.getAttribute('href'), location.href).href;
+
+      try {
+        await navigator.clipboard.writeText(url);
+        toast('Đã sao chép liên kết');
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); toast('Đã sao chép liên kết'); }
+        catch (e) { toast('Không copy được, hãy copy thủ công'); }
+        ta.remove();
+      }
+    });
+  });
+
+  /* ---------- Nút lên đầu ---------- */
+  window.addEventListener('scroll', () => {
+    toTop.classList.toggle('show', window.scrollY > 380);
+  }, { passive: true });
+
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
+</script>
 </body>
 </html>
