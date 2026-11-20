@@ -20,12 +20,16 @@
 
 html{scroll-behavior:smooth}
 
+/* ✅ FIX #2: hidden phải thắng display:flex */
+[hidden]{display:none!important}
+
 body{
   min-height:100vh;
   background:#070a12;
   color:var(--txt);
   font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
   -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
   overflow-x:hidden;
   padding:26px 20px 90px;
   position:relative;
@@ -81,19 +85,13 @@ body{
 }
 
 .brand{display:flex;align-items:center;gap:14px}
-.brand-mark{
-  width:54px;height:54px;flex:0 0 auto;border-radius:17px;
-  display:grid;place-items:center;
-  background:var(--grad);
-  font-weight:800;font-size:1.05rem;letter-spacing:.5px;color:#07101d;
-  box-shadow:0 12px 28px -8px rgba(88,166,255,.85);
-}
 .brand-name{font-size:1.4rem;font-weight:800;letter-spacing:.3px;line-height:1.15;color:#f2f7ff}
 .brand-name em{
   font-style:normal;
   background:var(--grad);
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;
+  color:transparent;
 }
 .brand-sub{
   font-size:.66rem;letter-spacing:2.6px;text-transform:uppercase;
@@ -141,14 +139,15 @@ body{
 /* ================= MAIN ================= */
 .main{min-width:0}
 
-.top-row{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.top-row{display:flex;gap:12px;align-items:center;margin-bottom:20px}
 .search{position:relative;flex:1;min-width:0}
 .search > i{
   position:absolute;left:15px;top:50%;transform:translateY(-50%);
   color:var(--dim2);font-size:.85rem;pointer-events:none;
+  transition:.25s;
 }
 .search input{
-  width:100%;padding:13px 16px 13px 42px;
+  width:100%;padding:14px 16px 14px 42px;
   background:rgba(16,22,34,.72);
   border:1px solid var(--line);
   border-radius:15px;
@@ -161,27 +160,13 @@ body{
   background:rgba(16,22,34,.92);
   box-shadow:0 0 0 4px rgba(88,166,255,.12);
 }
+.search:focus-within > i{color:#58a6ff}
 
 .count{
-  flex:0 0 auto;padding:12px 16px;border-radius:15px;
+  flex:0 0 auto;padding:13px 16px;border-radius:15px;
   background:rgba(255,255,255,.04);
   border:1px solid var(--line);
   font-size:.78rem;font-weight:700;color:var(--dim);white-space:nowrap;
-}
-
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.chip{
-  padding:9px 16px;border-radius:999px;
-  font-size:.79rem;font-weight:650;font-family:inherit;
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--line);
-  color:var(--dim);cursor:pointer;white-space:nowrap;
-  transition:.25s;
-}
-.chip:hover{color:var(--txt);border-color:var(--line2);background:rgba(255,255,255,.08)}
-.chip.on{
-  color:#07101d;background:var(--grad);border-color:transparent;
-  box-shadow:0 10px 24px -10px rgba(88,166,255,.95);
 }
 
 /* ================= FILE CARD ================= */
@@ -196,6 +181,7 @@ body{
   background:linear-gradient(150deg,rgba(22,29,44,.78),rgba(11,16,26,.78));
   border:1px solid var(--line);
   overflow:hidden;
+  cursor:pointer;
   transition:transform .3s cubic-bezier(.34,1.15,.64,1),border-color .3s,box-shadow .3s;
   animation:rise .6s cubic-bezier(.22,1,.36,1) both;
 }
@@ -224,13 +210,23 @@ body{
 }
 .file:hover::before{opacity:1}
 .file:hover::after{opacity:1}
+.file:active{transform:translateY(-1px) scale(.995)}
 
 .f-doc{--c:#58a6ff;--c-soft:rgba(88,166,255,.16)}
 .f-app{--c:#3ddc84;--c-soft:rgba(61,220,132,.16)}
 .f-tool{--c:#a78bfa;--c-soft:rgba(167,139,250,.16)}
 .f-web{--c:#f7df1e;--c-soft:rgba(247,223,30,.13)}
 
-.hit{position:absolute;inset:0;z-index:1;border-radius:inherit}
+/* ✅ FIX #1: link phủ TOÀN BỘ card, nằm TRÊN mọi thứ */
+.hit{
+  position:absolute;inset:0;
+  z-index:3;
+  border-radius:inherit;
+  cursor:pointer;
+}
+
+/* Nội dung trang trí không chặn click */
+.f-ico,.f-body,.f-dl{pointer-events:none}
 
 .f-ico{
   flex:0 0 auto;width:48px;height:48px;border-radius:15px;
@@ -242,7 +238,7 @@ body{
 }
 .file:hover .f-ico{transform:scale(1.07) rotate(-6deg);box-shadow:0 10px 24px -10px var(--c)}
 
-.f-body{flex:1;min-width:0;position:relative;z-index:0}
+.f-body{flex:1;min-width:0}
 .f-name{font-size:.96rem;font-weight:650;line-height:1.4;color:#f2f7ff;word-break:break-word}
 .f-meta{display:flex;align-items:center;gap:9px;margin-top:7px;flex-wrap:wrap}
 .tag{
@@ -258,22 +254,9 @@ body{
   word-break:break-word;
 }
 
-.f-side{
-  flex:0 0 auto;display:flex;align-items:center;gap:8px;
-  position:relative;z-index:2;
-}
-.icon-btn{
-  width:38px;height:38px;border-radius:12px;
-  display:grid;place-items:center;
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--line);
-  color:var(--dim);font-size:.88rem;font-family:inherit;
-  cursor:pointer;transition:.25s;
-}
-.icon-btn:hover{color:#f2f7ff;background:rgba(255,255,255,.1);border-color:var(--line2);transform:translateY(-2px)}
-
 .f-dl{
-  width:38px;height:38px;border-radius:12px;
+  flex:0 0 auto;
+  width:40px;height:40px;border-radius:12px;
   display:grid;place-items:center;
   background:var(--c-soft);color:var(--c);
   border:1px solid rgba(255,255,255,.07);
@@ -297,22 +280,7 @@ body{
 }
 .foot i{color:#58a6ff}
 
-/* ================= TOAST + TOP ================= */
-.toast{
-  position:fixed;left:50%;bottom:30px;z-index:99;
-  display:flex;align-items:center;gap:10px;
-  padding:13px 20px;border-radius:14px;
-  background:rgba(16,22,34,.95);
-  border:1px solid rgba(61,220,132,.4);
-  box-shadow:0 20px 45px rgba(0,0,0,.6);
-  font-size:.83rem;font-weight:650;color:#f2f7ff;
-  transform:translate(-50%,26px);opacity:0;pointer-events:none;
-  transition:.35s cubic-bezier(.34,1.3,.64,1);
-  backdrop-filter:blur(12px);
-}
-.toast i{color:#3ddc84}
-.toast.show{transform:translate(-50%,0);opacity:1}
-
+/* ================= TOP ================= */
 .totop{
   position:fixed;right:18px;bottom:22px;z-index:60;
   width:46px;height:46px;border-radius:15px;
@@ -335,7 +303,6 @@ body{
   body{padding:16px 14px 84px}
 
   .side-card{padding:16px;border-radius:18px}
-  .brand-mark{width:46px;height:46px;border-radius:14px;font-size:.92rem}
   .brand-name{font-size:1.18rem}
   .brand-sub{font-size:.6rem;letter-spacing:2px}
   .side-desc{display:none}
@@ -346,28 +313,17 @@ body{
   .side-link{margin-top:14px;padding:11px 13px;font-size:.76rem}
   .live{display:none}
 
-  .top-row{gap:8px}
+  .top-row{gap:8px;margin-bottom:16px}
   .search input{padding:12px 14px 12px 38px;font-size:.85rem;border-radius:13px}
   .search > i{left:13px}
   .count{padding:11px 13px;font-size:.72rem;border-radius:13px}
-
-  /* chips cuộn ngang kiểu app */
-  .chips{
-    flex-wrap:nowrap;overflow-x:auto;margin:0 -14px 16px;
-    padding:0 14px 4px;scrollbar-width:none;
-    -webkit-overflow-scrolling:touch;
-  }
-  .chips::-webkit-scrollbar{display:none}
-  .chip{padding:8px 14px;font-size:.75rem}
 
   .file{padding:14px;gap:12px;border-radius:16px}
   .file:hover{transform:none}
   .f-ico{width:42px;height:42px;border-radius:13px;font-size:1.05rem}
   .f-name{font-size:.9rem}
   .f-note{font-size:.75rem;margin-top:8px}
-  .f-side{gap:6px}
-  .icon-btn,.f-dl{width:34px;height:34px;border-radius:11px;font-size:.8rem}
-  .toast{bottom:22px;font-size:.79rem;padding:12px 17px}
+  .f-dl{width:36px;height:36px;border-radius:11px;font-size:.82rem}
   .totop{right:14px;bottom:16px;width:44px;height:44px}
 }
 </style>
@@ -383,11 +339,10 @@ body{
 
 <div class="page">
 
-  <!-- ============ SIDEBAR (PC) / HEADER (MOBILE) ============ -->
+  <!-- ============ SIDEBAR ============ -->
   <aside class="side">
     <div class="side-card">
       <div class="brand">
-        <div class="brand-mark">HN</div>
         <div>
           <div class="brand-name">Hieu<em>Nguyxn</em></div>
           <div class="brand-sub">FileShare Hub</div>
@@ -418,22 +373,15 @@ body{
     <div class="top-row">
       <div class="search">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="q" placeholder="Tìm file, tool, tài liệu...">
+        <input type="text" id="q" placeholder="Tìm file, tool, tài liệu..." autocomplete="off">
       </div>
       <div class="count" id="count">6 tệp</div>
-    </div>
-
-    <div class="chips" id="chips">
-      <button class="chip on" data-cat="all">Tất cả</button>
-      <button class="chip" data-cat="doc">Tài liệu</button>
-      <button class="chip" data-cat="app">Ứng dụng</button>
-      <button class="chip" data-cat="tool">Công cụ</button>
     </div>
 
     <div class="list" id="list">
 
       <!-- 1 -->
-      <article class="file f-doc" data-cat="doc">
+      <article class="file f-doc">
         <a class="hit" href="ex&amp;code4reactJS.txt" download aria-label="Tải ex&amp;code4reactJS"></a>
         <div class="f-ico"><i class="fa-solid fa-file-lines"></i></div>
         <div class="f-body">
@@ -441,14 +389,11 @@ body{
           <div class="f-meta"><span class="tag">TXT</span><span class="size">1.07 KB</span></div>
           <p class="f-note">Tài liệu hướng dẫn start React từ con số 0.</p>
         </div>
-        <div class="f-side">
-          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
-          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
-        </div>
+        <span class="f-dl"><i class="fa-solid fa-download"></i></span>
       </article>
 
       <!-- 2 -->
-      <article class="file f-doc" data-cat="doc">
+      <article class="file f-doc">
         <a class="hit" href="Django.txt" download aria-label="Tải Django"></a>
         <div class="f-ico"><i class="fa-solid fa-file-lines"></i></div>
         <div class="f-body">
@@ -456,14 +401,11 @@ body{
           <div class="f-meta"><span class="tag">TXT</span><span class="size">1.49 KB</span></div>
           <p class="f-note">Tài liệu hướng dẫn start Django chi tiết.</p>
         </div>
-        <div class="f-side">
-          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
-          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
-        </div>
+        <span class="f-dl"><i class="fa-solid fa-download"></i></span>
       </article>
 
       <!-- 3 -->
-      <article class="file f-app" data-cat="app">
+      <article class="file f-app">
         <a class="hit" href="HieuNguyxn.apk" download aria-label="Tải App apk tự tạo"></a>
         <div class="f-ico"><i class="fa-brands fa-android"></i></div>
         <div class="f-body">
@@ -471,29 +413,23 @@ body{
           <div class="f-meta"><span class="tag">APK</span><span class="size">5.41 MB</span></div>
           <p class="f-note">HieuNguyxn.apk — App tự tạo với mục đích học tập, ae xem rồi đánh giá nha.</p>
         </div>
-        <div class="f-side">
-          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
-          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
-        </div>
+        <span class="f-dl"><i class="fa-solid fa-download"></i></span>
       </article>
 
       <!-- 4 -->
-      <article class="file f-tool" data-cat="tool">
-        <a class="hit" href="Dos V2.zip" download aria-label="Tải Dos V2"></a>
+      <article class="file f-tool">
+        <a class="hit" href="Dos%20V2.zip" download aria-label="Tải Dos V2"></a>
         <div class="f-ico"><i class="fa-solid fa-file-zipper"></i></div>
         <div class="f-body">
           <div class="f-name">Dos V2</div>
           <div class="f-meta"><span class="tag">ZIP</span><span class="size">55 KB</span></div>
           <p class="f-note">Dos V2.zip — Ddos Internet... (Đã update tự động cài Python 3.14).</p>
         </div>
-        <div class="f-side">
-          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
-          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
-        </div>
+        <span class="f-dl"><i class="fa-solid fa-download"></i></span>
       </article>
 
       <!-- 5 -->
-      <article class="file f-tool" data-cat="tool">
+      <article class="file f-tool">
         <a class="hit" href="DoiTenGCN.exe" download aria-label="Tải Tool Đổi Tên File GCN"></a>
         <div class="f-ico"><i class="fa-brands fa-windows"></i></div>
         <div class="f-body">
@@ -501,14 +437,11 @@ body{
           <div class="f-meta"><span class="tag">EXE</span><span class="size">18.67 MB</span></div>
           <p class="f-note">DoiTenGCN.exe — Hỗ trợ đổi tên GCN nhanh nhờ NotebookLM.</p>
         </div>
-        <div class="f-side">
-          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
-          <span class="f-dl"><i class="fa-solid fa-download"></i></span>
-        </div>
+        <span class="f-dl"><i class="fa-solid fa-download"></i></span>
       </article>
 
       <!-- 6 -->
-      <article class="file f-web" data-cat="tool">
+      <article class="file f-web">
         <a class="hit" href="https://hieunguyxn.pythonanywhere.com/dichvu/obfpython/" target="_blank" rel="noopener" aria-label="Mở Tool Obfuscator"></a>
         <div class="f-ico"><i class="fa-brands fa-python"></i></div>
         <div class="f-body">
@@ -516,10 +449,7 @@ body{
           <div class="f-meta"><span class="tag">WEB</span><span class="size">Online</span></div>
           <p class="f-note">Mã hóa (encode) source Python với obfuscator Shenron.</p>
         </div>
-        <div class="f-side">
-          <button class="icon-btn copy" title="Sao chép liên kết"><i class="fa-regular fa-copy"></i></button>
-          <span class="f-dl"><i class="fa-solid fa-arrow-right"></i></span>
-        </div>
+        <span class="f-dl"><i class="fa-solid fa-arrow-right"></i></span>
       </article>
 
     </div>
@@ -537,33 +467,40 @@ body{
   </main>
 </div>
 
-<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span>Đã sao chép liên kết</span></div>
 <button class="totop" id="totop" aria-label="Lên đầu trang"><i class="fa-solid fa-arrow-up"></i></button>
 
 <script>
 (function () {
   const files   = Array.from(document.querySelectorAll('.file'));
-  const chips   = Array.from(document.querySelectorAll('.chip'));
   const qInput  = document.getElementById('q');
   const countEl = document.getElementById('count');
   const emptyEl = document.getElementById('empty');
   const statEl  = document.getElementById('statFiles');
-  const toastEl = document.getElementById('toast');
   const toTop   = document.getElementById('totop');
-  let activeCat = 'all';
 
   statEl.textContent = files.length;
 
-  /* ---------- Lọc + tìm kiếm ---------- */
+  /* Bỏ dấu tiếng Việt để tìm dễ hơn (gõ "doi ten" vẫn ra "Đổi Tên") */
+  function normalize(str) {
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+      .toLowerCase()
+      .trim();
+  }
+
+  /* Cache nội dung từng file 1 lần cho nhanh */
+  const index = files.map(f => ({ el: f, text: normalize(f.textContent) }));
+
+  /* ---------- Tìm kiếm ---------- */
   function apply() {
-    const q = qInput.value.trim().toLowerCase();
+    const q = normalize(qInput.value);
     let shown = 0;
 
-    files.forEach(f => {
-      const okCat = activeCat === 'all' || f.dataset.cat === activeCat;
-      const okQ   = !q || f.textContent.toLowerCase().includes(q);
-      const show  = okCat && okQ;
-      f.hidden = !show;
+    index.forEach(item => {
+      const show = !q || item.text.includes(q);
+      item.el.hidden = !show;
       if (show) shown++;
     });
 
@@ -571,49 +508,7 @@ body{
     emptyEl.hidden = shown !== 0;
   }
 
-  chips.forEach(c => c.addEventListener('click', () => {
-    chips.forEach(x => x.classList.remove('on'));
-    c.classList.add('on');
-    activeCat = c.dataset.cat;
-    apply();
-  }));
-
   qInput.addEventListener('input', apply);
-
-  /* ---------- Toast ---------- */
-  let toastTimer;
-  function toast(msg) {
-    toastEl.querySelector('span').textContent = msg;
-    toastEl.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1900);
-  }
-
-  /* ---------- Copy link ---------- */
-  document.querySelectorAll('.copy').forEach(btn => {
-    btn.addEventListener('click', async e => {
-      e.preventDefault();
-      e.stopPropagation();
-      const card = btn.closest('.file');
-      const link = card.querySelector('.hit');
-      const url  = new URL(link.getAttribute('href'), location.href).href;
-
-      try {
-        await navigator.clipboard.writeText(url);
-        toast('Đã sao chép liên kết');
-      } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = url;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); toast('Đã sao chép liên kết'); }
-        catch (e) { toast('Không copy được, hãy copy thủ công'); }
-        ta.remove();
-      }
-    });
-  });
 
   /* ---------- Nút lên đầu ---------- */
   window.addEventListener('scroll', () => {
